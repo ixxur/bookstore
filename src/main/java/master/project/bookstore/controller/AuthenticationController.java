@@ -34,6 +34,7 @@ public class AuthenticationController {
 //        User user = userService.loginUser()
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName(); // Get the username of the authenticated user
-        return ResponseEntity.ok("Login successful! You are authenticated as: " + currentUserName);
+        String currentUserRole = authentication.getAuthorities().toString();
+        return ResponseEntity.ok("Login successful! You are authenticated as: " + currentUserName + " " + currentUserRole);
     }
 }
