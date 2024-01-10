@@ -1,4 +1,5 @@
 package master.project.bookstore.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,6 +21,10 @@ public class User {
     @Column(unique = true)
     private String email;
     private String role;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @JsonManagedReference
+    private Cart cart;
+
 
     public User(String username, String password, String email, String role) {
         this.username = username;
@@ -67,6 +72,14 @@ public class User {
         this.email = email;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -74,6 +87,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", cart='" + cart + '\'' +
                 '}';
     }
 }
