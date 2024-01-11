@@ -1,5 +1,6 @@
 package master.project.bookstore.service;
 
+import jakarta.transaction.Transactional;
 import master.project.bookstore.entity.Book;
 import master.project.bookstore.entity.Cart;
 import master.project.bookstore.entity.CartItem;
@@ -64,6 +65,16 @@ public class CartService {
         }
 
         return cart;
+    }
+    @Transactional
+    public void emptyCart(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Cart cart = cartRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        cartItemRepository.deleteAllByCartId(cart.getId());
     }
 
 }

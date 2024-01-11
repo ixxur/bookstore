@@ -49,7 +49,19 @@ public class CartController {
         }
     }
 
-    // Add more methods for updating or removing items from the cart, emptying the cart, etc.
+    @PostMapping("/empty")
+    public ResponseEntity<?> emptyCart(@PathVariable String username) {
+        if (!isUserAuthenticated(username)) {
+            return ResponseEntity.status(403).body("Access denied");
+        }
+
+        try {
+            cartService.emptyCart(username);
+            return ResponseEntity.ok("Cart emptied successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 
     private boolean isUserAuthenticated(String username) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
