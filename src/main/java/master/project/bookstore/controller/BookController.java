@@ -15,6 +15,10 @@ import java.util.Optional;
 public class BookController {
     @Autowired
     private BookService bookService;
+
+//    public BookController(BookService bookService) {
+//    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<List<Book>> addBooks(@RequestBody List<Book> books) {

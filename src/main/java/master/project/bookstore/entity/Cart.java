@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "carts")
@@ -34,12 +35,30 @@ public class Cart {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
+        if (sameAsFormer(user)) {
+            return;
+        }
+        User oldUser = this.user;
         this.user = user;
+        if (oldUser != null) {
+            oldUser.setCart(null);
+        }
+        if (user != null) {
+            user.setCart(this);
+        }
+    }
+
+    private boolean sameAsFormer(User newUser) {
+        return Objects.equals(user, newUser);
     }
 
     public List<CartItem> getItems() {

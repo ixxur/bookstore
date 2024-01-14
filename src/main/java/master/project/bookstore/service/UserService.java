@@ -3,6 +3,7 @@ package master.project.bookstore.service;
 import master.project.bookstore.entity.Cart;
 import master.project.bookstore.entity.User;
 import master.project.bookstore.exception.UserAlreadyExistsException;
+import master.project.bookstore.repository.CartRepository;
 import master.project.bookstore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +18,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CartRepository cartRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -34,20 +37,16 @@ public class UserService {
         user.setUsername(username);
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(password));
+
+        user = userRepository.save(user);
+
         Cart cart = new Cart();
-        user.setCart(cart);
         cart.setUser(user);
-        return userRepository.save(user);
-    }
-    public boolean loginUser(String username, String password) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                return true; // Login successful
-            }
-        }
-        return false; // Login failed
+        cartRepository.save(cart);
+
+        user.setCart(cart);
+        userRepository.save(user);
+        return user;
     }
 
     public User findUserByUsername(String username) {

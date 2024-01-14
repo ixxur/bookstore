@@ -3,6 +3,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.Objects;
+
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
@@ -21,7 +24,7 @@ public class User {
     @Column(unique = true)
     private String email;
     private String role;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
     private Cart cart;
 
@@ -38,6 +41,10 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRole() {
@@ -77,7 +84,21 @@ public class User {
     }
 
     public void setCart(Cart cart) {
+        if (sameAsFormer(cart)) {
+            return;
+        }
+        Cart oldCart = this.cart;
         this.cart = cart;
+        if (oldCart != null) {
+            oldCart.setUser(null);
+        }
+        if (cart != null) {
+            cart.setUser(this);
+        }
+    }
+
+    private boolean sameAsFormer(Cart newCart) {
+        return Objects.equals(cart, newCart);
     }
 
     @Override

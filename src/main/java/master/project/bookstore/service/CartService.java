@@ -43,15 +43,20 @@ public class CartService {
             throw new Exception("Requested quantity exceeds book stock");
         }
 
-        Cart cart = cartRepository.findByUserId(user.getId())
-                .orElseGet(() -> {
-                    Cart newCart = new Cart();
-                    newCart.setUser(user);
-                    return cartRepository.save(newCart);
-                });
+        Cart cart = user.getCart();
+        if (cart == null) {
+            // User does not have a cart, create a new one
+            cart = new Cart();
+            cart.setUser(user);
+            user.setCart(cart);
+            cart = cartRepository.save(cart);
+            // Save the user to update the relationship in the database
+            userRepository.save(user);
+        }
 
+        final Cart finalCart = cart; // Final reference for use in lambda
         CartItem cartItem = cartItemRepository.findByCartIdAndBookId(cart.getId(), book.getId())
-                .orElseGet(() -> new CartItem(cart, book, 0));
+                .orElseGet(() -> new CartItem(finalCart, book, 0));
 
         int totalQuantity = cartItem.getQuantity() + quantity;
 
@@ -76,5 +81,4 @@ public class CartService {
 
         cartItemRepository.deleteAllByCartId(cart.getId());
     }
-
 }
