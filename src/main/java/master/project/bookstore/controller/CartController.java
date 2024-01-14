@@ -34,7 +34,6 @@ public class CartController {
         }
     }
 
-    // Retrieve the cart for the specified user
     @GetMapping
     public ResponseEntity<?> getCart(@PathVariable String username) {
         if (!isUserAuthenticated(username)) {

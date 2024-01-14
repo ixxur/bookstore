@@ -41,7 +41,6 @@ public class OrderService {
             throw new RuntimeException("Cannot create an order from an empty cart");
         }
 
-        // Create a new Order object
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(new Date());
@@ -50,7 +49,6 @@ public class OrderService {
         BigDecimal totalPrice = BigDecimal.ZERO;
         List<OrderDetail> orderDetails = new ArrayList<>();
 
-        // Iterate over CartItems, create OrderDetails, update book stock
         for (CartItem cartItem : cart.getItems()) {
             Book book = cartItem.getBook();
             int quantity = cartItem.getQuantity();
@@ -59,11 +57,9 @@ public class OrderService {
                 throw new RuntimeException("Insufficient stock for book: " + book.getTitle());
             }
 
-            // Update book stock
             book.setStock(book.getStock() - quantity);
             bookRepository.save(book);
 
-            // Create and add OrderDetail
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrder(order);
             orderDetail.setBook(book);
@@ -71,25 +67,19 @@ public class OrderService {
             orderDetail.setPrice(book.getPrice().multiply(new BigDecimal(quantity)));
             orderDetails.add(orderDetail);
 
-            // Add to total price
             totalPrice = totalPrice.add(orderDetail.getPrice());
         }
 
-        // Calculate total price
         order.setTotalPrice(totalPrice);
 
-        // Set order details and save the order
         order.setOrderDetails(orderDetails);
         Order savedOrder = orderRepository.save(order);
 
-        // Save order details
         orderDetailRepository.saveAll(orderDetails);
 
-        // Clear the cart
         cart.getItems().clear();
         cartRepository.save(cart);
 
-        // Return the saved order
         return savedOrder;
     }
 

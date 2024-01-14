@@ -67,13 +67,13 @@ public class ReviewControllerTest {
     @WithMockUser(username = "maria", roles = "USER")
     public void testGetReviewsByBookTitle_Success() throws Exception {
         String title = "Pride and Prejudice";
-        List<Review> reviews = Arrays.asList(new Review()); // Populate with expected result
+        List<Review> reviews = Arrays.asList(new Review());
 
         when(reviewService.getReviewsByBookTitle(title)).thenReturn(reviews);
 
         mockMvc.perform(get("/reviews/book/" + title))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$", hasSize(1))); // Add more JSON path assertions as needed
+                .andExpect((ResultMatcher) jsonPath("$", hasSize(1)));
     }
 
 }

@@ -31,9 +31,8 @@ public class AuthenticationController {
 
     @GetMapping("/test-login")
     public ResponseEntity<String> testAuthentication() {
-//        User user = userService.loginUser()
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserName = authentication.getName(); // Get the username of the authenticated user
+        String currentUserName = authentication.getName();
         String currentUserRole = authentication.getAuthorities().toString();
         return ResponseEntity.ok("Login successful! You are authenticated as: " + currentUserName + " " + currentUserRole);
     }

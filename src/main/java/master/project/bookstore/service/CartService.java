@@ -45,26 +45,22 @@ public class CartService {
 
         Cart cart = user.getCart();
         if (cart == null) {
-            // User does not have a cart, create a new one
             cart = new Cart();
             cart.setUser(user);
             user.setCart(cart);
             cart = cartRepository.save(cart);
-            // Save the user to update the relationship in the database
             userRepository.save(user);
         }
 
-        final Cart finalCart = cart; // Final reference for use in lambda
+        final Cart finalCart = cart;
         CartItem cartItem = cartItemRepository.findByCartIdAndBookId(cart.getId(), book.getId())
                 .orElseGet(() -> new CartItem(finalCart, book, 0));
 
         int totalQuantity = cartItem.getQuantity() + quantity;
 
         if (totalQuantity <= 0) {
-            // If the total quantity is less than or equal to zero, remove the item from the cart
             cartItemRepository.delete(cartItem);
         } else {
-            // Otherwise, update the quantity and save the item
             cartItem.setQuantity(totalQuantity);
             cartItemRepository.save(cartItem);
         }
