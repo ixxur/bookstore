@@ -73,7 +73,7 @@ public class ReviewControllerTest {
 
         mockMvc.perform(get("/reviews/book/" + title))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$", hasSize(1)));
+                .andExpect( jsonPath("$", hasSize(1)));
     }
 
 }

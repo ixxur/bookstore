@@ -27,7 +27,6 @@ public class BookServiceTest {
         String title = "Existing Book";
         Book mockBook = new Book();
         mockBook.setTitle(title);
-        // other properties of Book can be set here
 
         when(bookRepository.findByTitle(title)).thenReturn(Optional.of(mockBook));
 

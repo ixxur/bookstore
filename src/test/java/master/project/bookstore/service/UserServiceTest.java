@@ -27,7 +27,6 @@ public class UserServiceTest {
         String username = "ana";
         User mockUser = new User();
         mockUser.setUsername(username);
-        // other user properties can be set here
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
 

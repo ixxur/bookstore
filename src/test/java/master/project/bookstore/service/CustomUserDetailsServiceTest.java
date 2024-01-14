@@ -52,7 +52,6 @@ public class CustomUserDetailsServiceTest {
         assertEquals(username, userDetails.getUsername());
         assertEquals(password, userDetails.getPassword());
 
-        // Convert both collections to a common type (like a Set) for comparison
         Set<String> expectedAuthorities = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());

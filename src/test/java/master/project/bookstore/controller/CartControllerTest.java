@@ -20,9 +20,6 @@ import static org.mockito.Mockito.*;
 public class CartControllerTest {
     private MockMvc mockMvc;
 
-    @Mock
-    private UserService userService;
-
     @InjectMocks
     private CartController cartController;
 

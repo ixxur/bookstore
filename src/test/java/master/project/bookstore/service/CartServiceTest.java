@@ -69,14 +69,14 @@ public class CartServiceTest {
         String title = "Pride and Prejudice";
         int quantity = 1;
 
-        User user = new User();  // Create a User object with necessary fields
+        User user = new User();
         user.setId(10L);
         Cart cart = new Cart();
         cart.setId(4L);
         cart.setUser(user);
         user.setCart(cart);
 
-        Book book = new Book();  // Create a Book object with necessary fields
+        Book book = new Book();
         book.setId(12L);
         book.setStock(10);
 

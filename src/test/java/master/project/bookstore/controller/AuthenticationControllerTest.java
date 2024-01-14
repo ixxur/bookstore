@@ -76,11 +76,9 @@ public class AuthenticationControllerTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn("ruxi");
 
-        // Create an ArrayList for authorities
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        // Use doReturn for setting up the mock
         doReturn(authorities).when(authentication).getAuthorities();
 
         ResponseEntity<String> response = authenticationController.testAuthentication();
