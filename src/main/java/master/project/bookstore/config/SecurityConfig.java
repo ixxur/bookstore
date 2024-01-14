@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/register").permitAll()
+                .requestMatchers("/auth/register", "/swagger-ui","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                 .requestMatchers(HttpMethod.POST,"/books/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/books/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/books/**").hasRole("ADMIN")
